@@ -49,8 +49,42 @@ function addcheck(self) {
   })
 }
 
+//获得已经存在的详细检查
+function getexistdetail(self){
+  self.$http.get('api//his/DoctorController/getCheckAppliesByConditions',{
+    params:{
+      registrationId:self.registerId
+    }
+  }).then(function (response) {
+    console.log(response.data)
+    //将已有的详细检查添加
+    for (var i=0;i<response.data.length;i++){
+      for (var j=0;j<response.data[i].checkDetailedList.length;j++){
+        var tmp={}
+        tmp.label = response.data[i].checkDetailedList[j].itemname
+        tmp.value = response.data[i].checkDetailedList[j].id
+        tmp.deptid = response.data[i].checkDetailedList[j].deptid
+        tmp.price = response.data[i].checkDetailedList[j].price
+        if (response.data[i].checkDetailedList[j].state == 1){
+          tmp.state = "等待执行"
+          tmp.result = "无"
+        }else if(response.data[i].checkDetailedList[j].state == 3){
+          tmp.state = "等待结果录入"
+          tmp.result = "无"
+        }
+        else{
+          tmp.state = "已出结果"
+          tmp.result = response.data[i].checkDetailedList[j].result
+        }
+        self.existdetail.push(tmp)
+      }
+    }
+  })
+}
+
 export {
   getAllFmedItems,
   addcheck,
-  adddetail
+  adddetail,
+  getexistdetail
 }

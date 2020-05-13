@@ -24,14 +24,39 @@
           </i-input>
         </FormItem>
         <FormItem class="doctorFormItem">
-          <Card class="card" v-for="(item,i) in checkapplydetail" :key="i">
+          <Card class="existcard" v-for="(item,i) in existdetail" :key="i">
             <p slot="title">
               <Icon type="ios-film-outline"></Icon>
-              挂号信息
+              已经存在检查
             </p>
             <ul>
               <li class="li">
-                项目名称:{{item.itemname}}
+                项目名称:{{item.label}}
+              </li>
+              <li class="li">
+                执行科室:{{item.deptid}}
+              </li>
+              <li class="li">
+                价格:{{item.price}}
+              </li>
+              <li class="li">
+                是否执行:{{item.state}}
+              </li>
+              <li class="li">
+                检查结果:{{item.result}}
+              </li>
+            </ul>
+          </Card>
+        </FormItem>
+        <FormItem class="doctorFormItem">
+          <Card class="card" v-for="(item,i) in checkapplydetail" :key="i">
+            <p slot="title">
+              <Icon type="ios-film-outline"></Icon>
+              新增检查信息
+            </p>
+            <ul>
+              <li class="li">
+                项目名称:{{item.label}}
               </li>
               <li class="li">
                 执行科室:{{item.deptid}}
@@ -62,6 +87,7 @@
   import {getAllFmedItems} from "./checkapply";
   import {addcheck} from "./checkapply";
   import {adddetail} from "./checkapply";
+  import {getexistdetail} from "./checkapply";
 
   export default {
     data(){
@@ -76,12 +102,14 @@
           id:"",//checkapplyCustom的id
           objective:"",//检查目的
         },//检查
+        existdetail:[],//已经存在的详细检查
       }
     },
     created() {
       this.userId = window.localStorage.getItem("userID")
       this.medicalrecordid = window.localStorage.getItem("medicalrecordid")
       getAllFmedItems(this)
+      getexistdetail(this)
     },
     methods:{
       //添加checkapply以及checkappdetail

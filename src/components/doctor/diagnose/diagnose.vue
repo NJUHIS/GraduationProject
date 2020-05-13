@@ -35,6 +35,7 @@
   import {getMedicalrecord} from "./diagnose";
   import {getAlldisease} from "./diagnose";
   import {adddiagnose} from "./diagnose";
+  import {getDiseaseById} from "./diagnose";
 
   export default {
     data(){
@@ -52,6 +53,7 @@
       this.registerId = window.localStorage.getItem("registrationId")
       getMedicalrecord(this)
       getAlldisease(this)
+      getDiseaseById(this)
     },
     methods:{
       //确认添加诊断

@@ -26,7 +26,6 @@ function getAlldisease(self) {
 }
 //确认添加诊断
 function adddiagnose(self) {
-  console.log(self.medicalrecordid+"1232"+self.diseaseId)
   self.$http.post('api//his/BasicInformationController/addDiagnosis',{
     medicalid:self.medicalrecordid,
     diseaseid:self.diseaseId
@@ -35,9 +34,13 @@ function adddiagnose(self) {
     self.$Message.success("添加成功")
   })
 }
+//添加已有诊断
+function getDiseaseById(self) {
 
+}
 export {
   getMedicalrecord,
   getAlldisease,
-  adddiagnose
+  adddiagnose,
+  getDiseaseById
 }
