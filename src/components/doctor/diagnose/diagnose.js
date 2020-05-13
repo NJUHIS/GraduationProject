@@ -41,7 +41,7 @@ function getDiseaseById(self) {
 
     }
   }).then(function (response) {
-    console.log(response.data)
+
   })
 }
 export {

@@ -61,7 +61,7 @@ function getexistdetail(self){
     for (var i=0;i<response.data.length;i++){
       for (var j=0;j<response.data[i].checkDetailedList.length;j++){
         var tmp={}
-        tmp.label = response.data[i].checkDetailedList[j].itemname
+        tmp.label = response.data[i].checkDetailedList[j].fmedItem.itemname
         tmp.value = response.data[i].checkDetailedList[j].id
         tmp.deptid = response.data[i].checkDetailedList[j].deptid
         tmp.price = response.data[i].checkDetailedList[j].price
