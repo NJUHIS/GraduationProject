@@ -36,7 +36,13 @@ function adddiagnose(self) {
 }
 //添加已有诊断
 function getDiseaseById(self) {
+  self.$http.get('',{
+    params:{
 
+    }
+  }).then(function (response) {
+    console.log(response.data)
+  })
 }
 export {
   getMedicalrecord,

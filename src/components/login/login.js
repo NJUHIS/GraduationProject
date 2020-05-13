@@ -18,6 +18,8 @@ function login(userID,password,flag3,route,self) {
         route.push("/doctor")
       }else if (typid == 7){
         route.push("/adddoctor")
+      }else if (typid ==3){
+        route.push("/technologydoctor")
       }
     }).catch(function (error) {
       self.$Message.error(error.response.data.message)

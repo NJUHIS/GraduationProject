@@ -47,7 +47,7 @@
         diseaseList:[],//诊断列表
       }
     },
-    created() {
+    mounted() {
       this.userId = window.localStorage.getItem("userID")
       //通过挂号id找到病例id
       this.registerId = window.localStorage.getItem("registrationId")

@@ -94,6 +94,7 @@
       return{
         detailmodal:false,//检查明细modal
         userId:0,//医生的id
+        registerId:0,
         medicalrecordid:0,//病例Id
         checkprojectList:[],//检查列表
         checkapplydetail:[],//详细检查列表
@@ -105,9 +106,10 @@
         existdetail:[],//已经存在的详细检查
       }
     },
-    created() {
+    mounted() {
       this.userId = window.localStorage.getItem("userID")
       this.medicalrecordid = window.localStorage.getItem("medicalrecordid")
+      this.registerId = window.localStorage.getItem("registrationId")
       getAllFmedItems(this)
       getexistdetail(this)
     },
@@ -115,6 +117,10 @@
       //添加checkapply以及checkappdetail
       addcheck(){
         addcheck(this)
+      },
+      //删除
+      del(i){
+        this.checkapplydetail.splice(i,i+1)
       },
       //添加检查明细
       addcheckdetail(){
