@@ -16,6 +16,8 @@ import Addregisterlevel from '@/components/admin/addregisterlevel/addregisterlev
 import Addsettlecategory from '@/components/admin/addsettlecategory/addsettlecategory.vue'
 import prescption from '@/components/doctor/prescption/prescption.vue'
 import Checkapply from '@/components/doctor/checkapply/checkapply.vue'
+import GungMedicalRecord from "@/gung_componets/gung_doctor/gung_medical_record/GungMedicalRecord";
+import GungRegistration from "@/gung_componets/gung_doctor/gung_registration/GungRegistration";
 
 Vue.use(Router)
 export default new Router({
@@ -99,6 +101,16 @@ export default new Router({
       path:"/addsettlecategory",
       name:"addsettlecategory",
       component:Addsettlecategory
+    },
+    {
+      name:"GungRegistrationRoute",
+      path:"/gung-registration",
+      component:GungRegistration
+    },
+    {
+      name:"GungMedicalRecordRoute",
+      path:"/gung-medical-record",
+      component:GungMedicalRecord
     }
   ]
 })

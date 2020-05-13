@@ -18,7 +18,7 @@
       </div>
     </Menu>
     <div class="layout-content">
-      <Card class="card" v-for="(item,i) in registerList" :key="i">
+      <Card class="card" v-for="(item,i) in registerList" v-bind:key="i">
         <p slot="title">
           <Icon type="ios-film-outline"></Icon>
           挂号信息
@@ -37,6 +37,7 @@
             {{item.isbook}}
           </li>
           <Button type="primary" @click="admit(i)" class="button" >继续看诊</Button>
+          <Button type="default" @click="routeToGungRegistration(item.id)" class="button" >查看挂号(G)</Button>
         </ul>
       </Card>
     </div>
@@ -77,6 +78,16 @@
       during(){
         during(this.$router)
       },
+
+      routeToGungRegistration(registrationId){
+        this.$router.push({
+          name: "GungRegistrationRoute",
+          query: {
+            registrationId:registrationId,
+          }
+        })
+      }
+
     },
   }
 </script>
