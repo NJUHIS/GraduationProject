@@ -17,6 +17,9 @@ import Addsettlecategory from '@/components/admin/addsettlecategory/addsettlecat
 import prescption from '@/components/doctor/prescption/prescption.vue'
 import Checkapply from '@/components/doctor/checkapply/checkapply.vue'
 import technologydoctor from '@/components/technologydoctor/personalinformation/personalinformation.vue'
+import GungRegistration from "../DO_NOT_DELETE/gung_componets/GungRegistration";
+import GungMedicalRecord from "../DO_NOT_DELETE/gung_componets/GungMedicalRecord";
+import GungMedicineDispensing from "../DO_NOT_DELETE/gung_componets/GungMedicineDispensing";
 
 Vue.use(Router)
 export default new Router({
@@ -105,6 +108,24 @@ export default new Router({
       path:"/technologydoctor",
       name:"technologydoctor",
       component:technologydoctor
+    },
+    {
+      name:"GungRegistrationRoute",
+      path:"/gung-registration",
+      component:GungRegistration
+    },
+    {
+      name:"GungMedicalRecordRoute",
+      path:"/gung-medical-record",
+      component:GungMedicalRecord
+
+    },
+    ,
+    {
+      name:"GungMedicineDispensing",
+      path:"/gung-medicine-dispensing",
+      component:GungMedicineDispensing
+
     }
   ]
 })
