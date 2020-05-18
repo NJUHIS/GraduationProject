@@ -28,27 +28,22 @@
           </i-input>
         </FormItem>
         <FormItem class="doctorFormItem">
-          <Card class="existcard" v-for="(item,i) in existdetail" :key="i">
+          <Card class="existcard" v-for="(item,i) in existapply" :key="i">
             <p slot="title">
               <Icon type="ios-film-outline"></Icon>
-              已经存在检查
+              检查单
             </p>
             <ul>
               <li class="li">
-                项目名称:{{item.label}}
+                检查单编号:{{item.id}}
               </li>
               <li class="li">
-                执行科室:{{item.deptid}}
+                检查目的:{{item.objective}}
               </li>
               <li class="li">
-                价格:{{item.price}}
+                执行状态:{{item.state}}
               </li>
-              <li class="li">
-                是否执行:{{item.state}}
-              </li>
-              <li class="li">
-                检查结果:{{item.result}}
-              </li>
+              <Button type="primary" @click="read(i)" class="button" >查看详情</Button>
             </ul>
           </Card>
         </FormItem>
@@ -85,6 +80,32 @@
       </Select>
       <Button type="primary" @click="adddetail">确认</Button>
     </Modal>
+    <!--查看检查单详情-->
+    <Modal title="检查单明细" v-model="checkmodal" class="modal" footer-hide>
+      <Card class="card" v-for="(item,i) in existcheck" :key="i">
+        <p slot="title">
+          <Icon type="ios-film-outline"></Icon>
+          检查项目
+        </p>
+        <ul>
+          <li class="li">
+            项目名称:{{item.label}}
+          </li>
+          <li class="li">
+            执行科室:{{item.deptid}}
+          </li>
+          <li class="li">
+            价格:{{item.price}}
+          </li>
+          <li class="li">
+            执行状态:{{item.state}}
+          </li>
+          <li class="li">
+            执行结果:{{item.result}}
+          </li>
+        </ul>
+      </Card>
+    </Modal>
   </div>
 </template>
 <script>
@@ -92,10 +113,12 @@
   import {addcheck} from "./checkapply";
   import {adddetail} from "./checkapply";
   import {getexistdetail} from "./checkapply";
+  import {read} from "./checkapply";
 
   export default {
     data(){
       return{
+        checkmodal:false,//查看已存在的详细
         detailmodal:false,//检查明细modal
         userId:0,//医生的id
         registerId:0,
@@ -107,7 +130,9 @@
           id:"",//checkapplyCustom的id
           objective:"",//检查目的
         },//检查
-        existdetail:[],//已经存在的详细检查
+        existdetail:[],//已经存在的详细检查全部含由checkapply+checkdetaillist
+        existapply:[],//可以显示的checkapply
+        existcheck:[],//可以显示的详细信息
       }
     },
     mounted() {
@@ -136,6 +161,10 @@
       //确认添加检查明细
       adddetail(){
         adddetail(this)
+      },
+      //查看存在的详情信息
+      read(i){
+        read(i,this)
       },
       //跳转到诊断界面
       diagnose(){
