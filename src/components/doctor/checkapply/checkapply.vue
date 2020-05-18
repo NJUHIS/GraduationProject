@@ -15,6 +15,10 @@
           <Icon type="ios-analytics"></Icon>
           病人具体用药
         </Menu-item>
+        <Menu-item name="4" @click.native="writecase">
+          <Icon type="ios-analytics"></Icon>
+          填写病例
+        </Menu-item>
       </div>
     </Menu>
     <div class="layout-content">
@@ -144,6 +148,10 @@
       //跳转到病人用药界面
       prescption(){
         this.$router.push("/prescption")
+      },
+      //跳转到填写病例界面
+      writecase(){
+        this.$router.push("/writecase")
       }
     },
   }

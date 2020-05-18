@@ -17,6 +17,7 @@ import Addsettlecategory from '@/components/admin/addsettlecategory/addsettlecat
 import prescption from '@/components/doctor/prescption/prescption.vue'
 import Checkapply from '@/components/doctor/checkapply/checkapply.vue'
 import technologydoctor from '@/components/technologydoctor/personalinformation/personalinformation.vue'
+import WriteCase from '@/components/doctor/writecase/writecase.vue';
 import GungRegistration from "../請勿刪除與改動此文件夾/gung_componets/GungRegistration";
 import GungMedicalRecord from "../請勿刪除與改動此文件夾/gung_componets/GungMedicalRecord";
 import GungMedicineDispensing from "../請勿刪除與改動此文件夾/gung_componets/GungMedicineDispensing";
@@ -111,6 +112,11 @@ export default new Router({
       path:"/technologydoctor",
       name:"technologydoctor",
       component:technologydoctor
+    },
+    {
+      name:"writecase",
+      path:"/writecase",
+      component:WriteCase
     },
     {
       name:"GungRegistrationRoute",
