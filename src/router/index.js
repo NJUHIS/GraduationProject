@@ -17,11 +17,7 @@ import Addsettlecategory from '@/components/admin/addsettlecategory/addsettlecat
 import prescption from '@/components/doctor/prescption/prescption.vue'
 import Checkapply from '@/components/doctor/checkapply/checkapply.vue'
 import technologydoctor from '@/components/technologydoctor/personalinformation/personalinformation.vue'
-import GungRegistration from "../請勿刪除與改動此文件夾/gung_componets/GungRegistration";
-import GungMedicalRecord from "../請勿刪除與改動此文件夾/gung_componets/GungMedicalRecord";
-import GungMedicineDispensing from "../請勿刪除與改動此文件夾/gung_componets/GungMedicineDispensing";
-import GungPrescription from "../請勿刪除與改動此文件夾/gung_componets/GungPrescription";
-import GungTestExaminationDisposalExecution from "../請勿刪除與改動此文件夾/gung_componets/GungTestExaminationDisposalExecution";
+import WriteCase from '@/components/doctor/writecase/writecase.vue';
 
 Vue.use(Router)
 export default new Router({
@@ -122,23 +118,16 @@ export default new Router({
       component:GungMedicalRecord
 
     },
+    ,
     {
-      name:"GungMedicineDispensingRoute",
+      name:"GungMedicineDispensing",
       path:"/gung-medicine-dispensing",
       component:GungMedicineDispensing
-
     },
     {
-      name:"GungPrescriptionRoute",
-      path:"/gung-prescription",
-      component:GungPrescription
-
-    },
-    {
-      name:"GungTestExaminationDisposalExecution",
-      path:"/gung-test-examination-disposal-execution",
-      component:GungTestExaminationDisposalExecution
-
+      name:"writecase",
+      path:"/writecase",
+      component:WriteCase
     }
   ]
 })
