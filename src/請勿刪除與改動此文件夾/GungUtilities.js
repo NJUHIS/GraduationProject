@@ -39,3 +39,20 @@ export function toYYYYMMDD(date) {
   console.log("GungUtilities.toYYYYMMDD", year + '-' + month + '-' + day);
   return year + '-' + month + '-' + day;
 }
+
+
+
+export function translateTestExaminationDisposalDetailState(stateNumber){
+  switch(stateNumber) {
+    case 1:
+      return "未检验检查处置";
+    case 2:
+      return "检验检查处置中";
+    case 3:
+      return "检验检查处置完成，结果未出";
+    case 4:
+      return "结果已出";
+    default:
+      return "ERROR";
+  }
+}

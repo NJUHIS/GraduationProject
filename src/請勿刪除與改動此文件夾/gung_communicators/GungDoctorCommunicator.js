@@ -75,6 +75,18 @@ export function addPrescriptionDetailed(prescriptionDetailed){
   )
 }
 
+export function addCheckApply(checkApply){
+  return axiosInstance.post("/addCheckApply" ,
+    checkApply
+  )
+}
+
+export function addCheckDetailed(checkDetailed){
+  return axiosInstance.post("/addCheckDetailed" ,
+    checkDetailed
+  )
+}
+
 export function updatePrescription(prescription){
   return axiosInstance.post("/updatePrescription" ,
     prescription

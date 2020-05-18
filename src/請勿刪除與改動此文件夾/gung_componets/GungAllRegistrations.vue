@@ -7,11 +7,13 @@
       <div>
         <div>
           <Row>
-            <Col  span="4">
-              <DatePicker v-model="fromVisitDateRaw" @on-change="init" :start-date="fromVisitDateRaw" type="date"  placeholder="Select date" ></DatePicker>
+            <Col span="4">
+              <DatePicker :start-date="fromVisitDateRaw" @on-change="init" placeholder="Select date" type="date"
+                          v-model="fromVisitDateRaw"></DatePicker>
             </Col>
-            <Col span="4" >
-              <DatePicker v-model="toVisitDateRaw" @on-change="init"  :start-date="toVisitDateRaw" type="date"  placeholder="Select date" ></DatePicker>
+            <Col span="4">
+              <DatePicker :start-date="toVisitDateRaw" @on-change="init" placeholder="Select date" type="date"
+                          v-model="toVisitDateRaw"></DatePicker>
             </Col>
           </Row>
         </div>
@@ -33,18 +35,20 @@
                    @on-row-click="showRegistration"></i-table>
         </div>
       </div>
-      <div v-show="registration.id!=null" class="rightPane">
+      <div class="rightPane" v-show="registration.id!=null">
         <strong class="idTitle"> 挂号主键 ID : {{registration.id}}</strong><br><br>
-              <p>患者真实姓名: {{registration.realname}}</p>
-              <p>患者身份证号码: {{registration.idnumber}}</p>
-              <p>患者出生日期: {{registration.birthdate}}</p>
-              <p>患者家庭住址: {{registration.homeaddress}}</p>
-              <p>预约看诊日期: {{registration.visitdate}}</p>
-              <p>患者主键ID: {{registration.patientid}}</p>
-              <p>排班主键ID: {{registration.scheduleId}}</p>
-              <p>问诊状态：{{GungUtilities.translateRegistrationState(registration.visitstate)}}</p>
-        <Button v-show="registration.visitstate===0"  @click="admit"> 接诊</Button>
-        <Button v-show="registration.id!==null&&registration.visitstate!==0" :to="'/gung-registration?registrationId='+registration.id">详情</Button>
+        <p>患者真实姓名: {{registration.realname}}</p>
+        <p>患者身份证号码: {{registration.idnumber}}</p>
+        <p>患者出生日期: {{registration.birthdate}}</p>
+        <p>患者家庭住址: {{registration.homeaddress}}</p>
+        <p>预约看诊日期: {{registration.visitdate}}</p>
+        <p>患者主键ID: {{registration.patientid}}</p>
+        <p>排班主键ID: {{registration.scheduleId}}</p>
+        <p>问诊状态：{{GungUtilities.translateRegistrationState(registration.visitstate)}}</p>
+        <Button @click="admit" v-show="registration.visitstate===0"> 接诊</Button>
+        <Button :to="'/gung-registration?registrationId='+registration.id"
+                v-show="registration.id!==null&&registration.visitstate!==0">详情
+        </Button>
       </div>
     </div>
   </div>
@@ -66,8 +70,8 @@
       return {
         GungUtilities,
 
-        fromVisitDateRaw:new Date(),
-        toVisitDateRaw:new Date(),
+        fromVisitDateRaw: new Date(),
+        toVisitDateRaw: new Date(),
 
         user: {},
         registrationListColumns: [
@@ -109,12 +113,12 @@
 
         try {
           let conditions = {
-            fromVisitDate:GungUtilities.toYYYYMMDD(this.fromVisitDateRaw),
-            toVisitDate:GungUtilities.toYYYYMMDD(this.toVisitDateRaw),
+            fromVisitDate: GungUtilities.toYYYYMMDD(this.fromVisitDateRaw),
+            toVisitDate: GungUtilities.toYYYYMMDD(this.toVisitDateRaw),
             userId,
             visitState: 0,
-            fromNoon:1,
-            toNoon:4
+            fromNoon: 1,
+            toNoon: 4
 
           };
           let response = await GungRegistrationCommunicator.getRegistrationsByConditions(conditions);
@@ -134,12 +138,12 @@
               GungUtilities.showErrorMessage("掛號獲取失敗", error, this);
             }
           }
-          conditions.visitState=1;
+          conditions.visitState = 1;
           response = await GungRegistrationCommunicator.getRegistrationsByConditions(conditions);
           GungUtilities.showSuccessMessage("正在接診掛號列表加載成功", response, this);
           this.registrationListVisiting = response.data;
 
-          conditions.visitState=2;
+          conditions.visitState = 2;
 
           response = await GungRegistrationCommunicator.getRegistrationsByConditions(conditions);
           GungUtilities.showSuccessMessage("已接診掛號列表加載成功", response, this);
@@ -153,7 +157,7 @@
       showRegistration(data) {
         this.registration = data;
       },
-      async admit(){
+      async admit() {
         try {
           let response = await GungDoctorCommunicator.admit(this.registration.id);
           GungUtilities.showSuccessMessage("接診成功", response, this);
@@ -162,7 +166,7 @@
           GungUtilities.showErrorMessage("接診失敗", error, this);
         }
       },
-      test(){
+      test() {
         console.log("hello");
         console.log(GungUtilities.toYYYYMMDD(this.fromVisitDateRaw));
       }
@@ -188,7 +192,7 @@
     overflow: auto;
   }
 
-  .idTitle{
+  .idTitle {
     font-size: large;
   }
 </style>
