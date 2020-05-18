@@ -36,12 +36,13 @@ function adddiagnose(self) {
 }
 //添加已有诊断
 function getDiseaseById(self) {
-  self.$http.get('',{
+  console.log(self.registerId)
+  self.$http.get('api//his/DoctorController/getMedicalRecordsByConditions',{
     params:{
-
+      registrationId:self.registerId
     }
   }).then(function (response) {
-
+    console.log(response.data)
   })
 }
 export {
