@@ -37,8 +37,6 @@
             {{item.isbook}}
           </li>
           <Button type="primary" @click="admit(i)" class="button" >继续看诊</Button>
-<!--          <Button type="default" @click="routeToGungRegistration(item.id)" class="button" >查看挂号(G)</Button>-->
-          <Button type="default" v-bind:to="'/gung-registration?registrationId='+item.id" class="button" >查看挂号(G)</Button>
         </ul>
       </Card>
     </div>

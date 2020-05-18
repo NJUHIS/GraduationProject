@@ -6,8 +6,14 @@
     <div>
       <div>
         <div>
-          <!--        <p>挂号日期</p>-->
-          <!--        <DatePicker type="date" style="width: 200px"></DatePicker>-->
+          <Row>
+            <Col  span="4">
+              <DatePicker v-model="fromVisitDateRaw" @on-change="init" :start-date="fromVisitDateRaw" type="date"  placeholder="Select date" ></DatePicker>
+            </Col>
+            <Col span="4" >
+              <DatePicker v-model="toVisitDateRaw" @on-change="init"  :start-date="toVisitDateRaw" type="date"  placeholder="Select date" ></DatePicker>
+            </Col>
+          </Row>
         </div>
 
         <div class="listPane">
@@ -27,7 +33,7 @@
                    @on-row-click="showRegistration"></i-table>
         </div>
       </div>
-      <div class="rightPane">
+      <div v-show="registration.id!=null" class="rightPane">
         <strong class="idTitle"> 挂号主键 ID : {{registration.id}}</strong><br><br>
               <p>患者真实姓名: {{registration.realname}}</p>
               <p>患者身份证号码: {{registration.idnumber}}</p>
@@ -39,15 +45,6 @@
               <p>问诊状态：{{GungUtilities.translateRegistrationState(registration.visitstate)}}</p>
         <Button v-show="registration.visitstate===0"  @click="admit"> 接诊</Button>
         <Button v-show="registration.id!==null&&registration.visitstate!==0" :to="'/gung-registration?registrationId='+registration.id">详情</Button>
-
-        <!--      <br><br>-->
-        <!--      <Button to="/doctor">医生个人主页</Button>-->
-
-        <!--      &lt;!&ndash;      <Button :to="'/gung-medical-record?medicalRecordId='+registration.id">病历</Button>&ndash;&gt;-->
-        <!--      &lt;!&ndash;      <Button :to="'/gung-prescription?prescriptionId='+registration.id">处方</Button>&ndash;&gt;-->
-        <!--      <Button to="/checkapply">检查检验和处置</Button>-->
-        <!--      <Button :disabled="registration.visitstate!==1"   @click="finishDiagnosis"> 诊毕</Button>-->
-
       </div>
     </div>
   </div>
@@ -68,6 +65,10 @@
     data() {
       return {
         GungUtilities,
+
+        fromVisitDateRaw:new Date(),
+        toVisitDateRaw:new Date(),
+
         user: {},
         registrationListColumns: [
           {
@@ -92,6 +93,9 @@
     },
     methods: {
       async init() {
+
+        console.log(GungUtilities.toYYYYMMDD(this.fromVisitDateRaw));
+
         let userId = window.localStorage.getItem("userID");
         try {
           let response = await GungPersonalInformationCommunicator.getUserById(userId);
@@ -105,8 +109,13 @@
 
         try {
           let conditions = {
+            fromVisitDate:GungUtilities.toYYYYMMDD(this.fromVisitDateRaw),
+            toVisitDate:GungUtilities.toYYYYMMDD(this.toVisitDateRaw),
             userId,
-            visitState: 0
+            visitState: 0,
+            fromNoon:1,
+            toNoon:4
+
           };
           let response = await GungRegistrationCommunicator.getRegistrationsByConditions(conditions);
           GungUtilities.showSuccessMessage("未接診掛號列表加載成功", response, this);
@@ -125,18 +134,13 @@
               GungUtilities.showErrorMessage("掛號獲取失敗", error, this);
             }
           }
-          conditions = {
-            userId,
-            visitState: 1
-          };
+          conditions.visitState=1;
           response = await GungRegistrationCommunicator.getRegistrationsByConditions(conditions);
           GungUtilities.showSuccessMessage("正在接診掛號列表加載成功", response, this);
           this.registrationListVisiting = response.data;
 
-          conditions = {
-            userId,
-            visitState: 2
-          };
+          conditions.visitState=2;
+
           response = await GungRegistrationCommunicator.getRegistrationsByConditions(conditions);
           GungUtilities.showSuccessMessage("已接診掛號列表加載成功", response, this);
           this.registrationListVisited = response.data;
@@ -157,6 +161,10 @@
         } catch (error) {
           GungUtilities.showErrorMessage("接診失敗", error, this);
         }
+      },
+      test(){
+        console.log("hello");
+        console.log(GungUtilities.toYYYYMMDD(this.fromVisitDateRaw));
       }
     }
   }
