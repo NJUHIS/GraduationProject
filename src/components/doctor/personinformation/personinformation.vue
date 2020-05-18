@@ -29,7 +29,11 @@
       <label class="label">
         隶属科室: {{doctorCustom.deptname}}
       </label>
+
       <br>
+      <Button to="/gung-test-examination-disposal-execution">我是医技医生</Button>
+      <Button to="/gung-medicine-dispensing">我是药房医生</Button>
+
     </div>
   </div>
 </template>

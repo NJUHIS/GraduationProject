@@ -1,5 +1,6 @@
 import $ from 'jquery';
 //获取所有非药品检查项目
+import{confirmCheckApply} from '@/請勿刪除與改動此文件夾/gung_communicators/GungDoctorCommunicator.js'
 function getAllFmedItems(self) {
   self.$http.get('api//his/BasicInformationController/getAllFmedItems',{
   }).then(function (response) {
@@ -46,6 +47,7 @@ function addcheck(self) {
     self1.$Message.success("恭喜添加成功")
     self.checkapplyCustom.objective = ""
     self.checkapplydetail.splice(0,self.checkapplydetail.length)
+    confirmCheckApply(response.data.id);//todo 臨時
   })
 }
 

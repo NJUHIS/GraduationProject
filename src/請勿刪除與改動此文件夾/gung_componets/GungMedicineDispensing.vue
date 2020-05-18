@@ -1,15 +1,27 @@
 <template>
 
   <div id="rootPane">
-    <div id="leftPane">
-      <i-table highlight-row :columns="prescriptionListColumns" :data="prescriptionList" @on-row-click="showDrugList"></i-table>
+    <div class="listPane">
+      <p>等待发药</p>
+      <i-table :columns="prescriptionListColumns" :data="prescriptionList" @on-row-click="showDrugList"></i-table>
+    </div>
+    <div class="listPane">
+      <p>已发药</p>
+      <i-table :columns="prescriptionListColumns" :data="prescriptionListDispensed" @on-row-click="showDrugList"></i-table>
+    </div>
+
+    <div class="listPane">
+      <p>已退药</p>
+      <i-table  :columns="prescriptionListColumns" :data="prescriptionListReturned" @on-row-click="showDrugList"></i-table>
     </div>
     <div id="rightPane">
       <strong>处方主键 ID ：{{prescription.id}} &nbsp 处方名称：{{prescription.prescriptionName}} </strong>
       <br>
-      <Button type="primary" @click="dispenseMedicine">药品已发</Button>
-      <i-table :columns="drugListColumns" :data="prescription.prescriptionDetailedList"></i-table>
+      <Button type="primary" v-show="prescription.id!=null&&prescription.prescriptionState===3" @click="dispenseMedicine">确认药品已发</Button>
+      <Button type="primary" v-show="prescription.id!=null&&prescription.prescriptionState===4" @click="returnMedicine">确认药品已退</Button>
+      <i-table :columns="prescriptionDetailColumns" :data="prescription.prescriptionDetailedList"></i-table>
     </div>
+
   </div>
 
 </template>
@@ -21,6 +33,7 @@
     import * as GungDoctorCommunicator from "../gung_communicators/GungDoctorCommunicator"
     import * as GungBasicInformationCommunicator from "../gung_communicators/GungBasicInformationCommunicator"
     import * as GungPharmacyCommunicator from "../gung_communicators/GungPharmacyCommunicator"
+    import prescption from "../../components/doctor/prescption/prescption";
 
     export default {
       name: "GungMedicineDispensing",
@@ -38,7 +51,7 @@
               }
             }
           ],
-          drugListColumns:[
+          prescriptionDetailColumns:[
             {
               title: '药品主键 ID',
               render:(h,params) => {
@@ -62,11 +75,19 @@
               render:(h,params) => {
                 return h('p',params.row.frequency)
               }
+            },
+            {
+              title: '数量',
+              render:(h,params) => {
+                return h('p',params.row.quantity)
+              }
             }
           ],
 
           prescriptionList:[],
-          prescription:""
+          prescriptionListDispensed:[],
+          prescriptionListReturned:[],
+          prescription:{}
         };
       },
 
@@ -78,11 +99,29 @@
           try {
             let response = await GungDoctorCommunicator.getPrescriptionsByConditions(null,3);
             GungUtilities.showSuccessMessage("處方列表加載成功",response, this);
-
             this.prescriptionList = response.data;
-            if(this.prescriptionList!=null&&this.prescriptionList.length>0){
-              this.prescription=this.prescriptionList[0];
+
+            if(this.prescription.id==null) {
+              if (this.prescriptionList != null && this.prescriptionList.length > 0) {
+                this.prescription = this.prescriptionList[0];
+              }
+            }else{
+              try {
+                let response = await GungDoctorCommunicator.getPrescriptionById(this.prescription.id);
+                GungUtilities.showSuccessMessage("處方獲取成功",response, this);
+                this.prescription=response.data;
+              } catch (error) {
+                GungUtilities.showErrorMessage("處方獲取失敗",error, this);
+              }
             }
+
+            response = await GungDoctorCommunicator.getPrescriptionsByConditions(null,4);
+            GungUtilities.showSuccessMessage("已發藥處方列表加載成功",response, this);
+            this.prescriptionListDispensed = response.data;
+
+            response = await GungDoctorCommunicator.getPrescriptionsByConditions(null,5);
+            GungUtilities.showSuccessMessage("已退藥處方列表加載成功",response, this);
+            this.prescriptionListReturned = response.data;
 
           } catch (error) {
             GungUtilities.showErrorMessage("處方列表加載失敗",error, this);
@@ -96,8 +135,20 @@
           try {
             let response = await GungPharmacyCommunicator.dispenseMedicine(this.prescription.id);
             GungUtilities.showSuccessMessage("發藥成功",response, this);
+            this.prescription=response.data;
           } catch (error) {
             GungUtilities.showErrorMessage("發藥失敗",error, this);
+          }
+          this.init();
+
+        },
+        async returnMedicine(){
+          try {
+            let response = await GungPharmacyCommunicator.returnMedicine(this.prescription.id);
+            GungUtilities.showSuccessMessage("退藥成功",response, this);
+            this.prescription=response.data;
+          } catch (error) {
+            GungUtilities.showErrorMessage("退藥失敗",error, this);
           }
           this.init();
 
@@ -115,9 +166,9 @@
 
 <style scoped>
 
-  #leftPane{
+  .listPane{
     float:left;
-    width:30%;
+    width:13%;
     height: 100vh;
     background-color: rgb(235, 235, 235);
     overflow: auto;
@@ -125,7 +176,7 @@
 
   #rightPane{
     float:left;
-    width: 70%;
+    width: 52%;
     height: 100vh;
     overflow: auto;
   }

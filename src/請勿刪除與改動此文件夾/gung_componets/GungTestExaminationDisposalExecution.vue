@@ -1,0 +1,232 @@
+<template>
+
+  <div id="rootPane">
+    <div class="listPane">
+      <p>等待執行</p>
+      <i-table highlight-row :columns="testExaminationDisposalListColumns" :data="testExaminationDisposalList" @on-row-click="showTestExaminationDisposalDetailList"></i-table>
+    </div>
+    <div class="listPane">
+      <p>正在执行</p>
+      <i-table highlight-row :columns="testExaminationDisposalListColumns" :data="testExaminationDisposalListExecuting" @on-row-click="showTestExaminationDisposalDetailList"></i-table>
+    </div>
+    <div class="listPane">
+      <p>已完成</p>
+      <i-table highlight-row :columns="testExaminationDisposalListColumns" :data="testExaminationDisposalListFinished" @on-row-click="showTestExaminationDisposalDetailList"></i-table>
+    </div>
+    <div id="rightPane">
+
+      <strong>检查检验或处置主键 ID ：{{testExaminationDisposal.id}}  </strong>
+      <strong>检查检验或处置主键明细 ID ：{{testExaminationDisposalDetail.id}}  </strong>
+      <br>
+      <p>结果：</p>
+      <Input v-model="testExaminationDisposalDetail.result" type="textarea" :rows="3" placeholder="请输入..."></Input>
+      <Button type="primary" :disabled="testExaminationDisposalDetail.id==null||testExaminationDisposalDetail.state===4" @click="updateCheckDetailed">保存结果</Button>
+      <Button type="primary" :disabled="testExaminationDisposalDetail.id==null||testExaminationDisposalDetail.state!==1" @click="startCheckDetailed">开始</Button>
+      <Button type="primary" :disabled="testExaminationDisposalDetail.id==null||testExaminationDisposalDetail.state!==2" @click="finishCheckDetailed">结束</Button>
+      <Button type="primary" :disabled="testExaminationDisposalDetail.id==null||testExaminationDisposalDetail.state!==3" @click="reportCheckDetailed">完成并报告</Button>
+      <i-table highlight-row :columns="testExaminationDisposalDetailListColumns" :data="testExaminationDisposal.checkDetailedList" @on-row-click="showTestExaminationDisposalDetail"></i-table>
+    </div>
+  </div>
+</template>
+
+<script>
+  import * as GungRegistrationCommunicator from "../gung_communicators/GungRegistrationCommunicator";
+  import * as GungPersonalInformationCommunicator from "../gung_communicators/GungPersonalInformationCommunicator";
+  import * as GungDoctorCommunicator from "../gung_communicators/GungDoctorCommunicator"
+  import * as GungUtilities from "../GungUtilities";
+  import * as GungBasicInformationCommunicator from "../gung_communicators/GungBasicInformationCommunicator"
+  import * as GungMedicalTechnologyCommunicator from "../gung_communicators/GungMedicalTechnologyCommunicator"
+    export default {
+        name: "GungTestExaminationDisposalExecution",
+      data() {
+        return {
+          testExaminationDisposalListColumns:[
+            {
+              title: '检查检验或处置列表',
+              render:(h,params) => {
+                return h('p',params.row.id)
+              }
+            }
+          ],
+          testExaminationDisposalDetailListColumns:[
+            {
+              title: '检查检验或处置明细主键 ID',
+              key:"id"
+            },
+            {
+              title: '项目名称',
+              render:(h,params) => {
+                return h('p',params.row.fmedItem.itemname)
+              }
+            },
+            {
+              title: '价格',
+              render:(h,params) => {
+                return h('p',params.row.fmedItem.price)
+              }
+            },
+            {
+              title: '状态',
+              render:(h,params) => {
+                return h('p',this.translateTestExaminationDisposalDetailState(params.row.state))
+              }
+            },
+            {
+              title: '结果',
+              render:(h,params) => {
+                return h('p',params.row.result)
+              }
+            }
+          ],
+          testExaminationDisposalList:[],
+          testExaminationDisposal:{},
+          testExaminationDisposalDetail:{},
+          testExaminationDisposalListFinished:[],
+          testExaminationDisposalListExecuting:[],
+        }
+      },
+      mounted() {
+        this.init();
+      },
+      methods:{
+          async init(){
+            try {
+              let response = await GungDoctorCommunicator.getCheckAppliesByConditions(null,3);
+              GungUtilities.showSuccessMessage("檢查檢驗和處置列表加載成功",response, this);
+              this.testExaminationDisposalList = response.data;
+
+
+              if(this.testExaminationDisposal.id==null) {
+                if (this.testExaminationDisposalList != null && this.testExaminationDisposalList.length > 0) {
+                  this.testExaminationDisposal = this.testExaminationDisposalList[0];
+                }
+              }else{
+                try {
+                  let response = await GungDoctorCommunicator.getCheckApplyById(this.testExaminationDisposal.id);
+                  GungUtilities.showSuccessMessage("檢查檢驗或處置獲取成功", response, this);
+                  this.testExaminationDisposal = response.data;
+                } catch (error) {
+                  GungUtilities.showErrorMessage("檢查檢驗或處置獲取失敗", error, this);
+                }
+              }
+
+              if(this.testExaminationDisposal.id!=null){
+                if(this.testExaminationDisposalDetail.id==null) {
+                  if (this.testExaminationDisposal.checkDetailedList != null && this.testExaminationDisposal.checkDetailedList.length > 0) {
+                    this.testExaminationDisposalDetail = this.testExaminationDisposal.checkDetailedList[0];
+                  }
+                }else{
+                  try {
+                    let response = await GungDoctorCommunicator.getCheckDetailedById(this.testExaminationDisposalDetail.id);
+                    GungUtilities.showSuccessMessage("檢查檢驗或處置明細獲取成功", response, this);
+                    this.testExaminationDisposalDetail = response.data;
+                  } catch (error) {
+                    GungUtilities.showErrorMessage("檢查檢驗或處置明細獲取失敗", error, this);
+                  }
+                }
+             }
+
+              response = await GungDoctorCommunicator.getCheckAppliesByConditions(null,4);
+              GungUtilities.showSuccessMessage("正在執行檢查檢驗和處置列表加載成功",response, this);
+              this.testExaminationDisposalListExecuting = response.data;
+
+              response = await GungDoctorCommunicator.getCheckAppliesByConditions(null,5);
+              GungUtilities.showSuccessMessage("已完成檢查檢驗和處置列表加載成功",response, this);
+              this.testExaminationDisposalListFinished = response.data;
+
+
+
+            } catch (error) {
+              GungUtilities.showErrorMessage("檢查檢驗和處置列表加載失敗",error, this);
+            }
+          },
+        showTestExaminationDisposalDetailList(data) {
+          this.testExaminationDisposal = data;
+          if(this.testExaminationDisposal.checkDetailedList!=null&&this.testExaminationDisposal.checkDetailedList.length>0){
+            this.testExaminationDisposalDetail=this.testExaminationDisposal.checkDetailedList[0];
+          }
+        },
+        showTestExaminationDisposalDetail(data) {
+          this.testExaminationDisposalDetail = data;
+        },
+        async updateCheckDetailed(){
+          try {
+            let response = await GungDoctorCommunicator.updateCheckDetailed(this.testExaminationDisposalDetail);
+            GungUtilities.showSuccessMessage("檢查檢驗或處置明細更新成功", response, this);
+            this.testExaminationDisposalDetail = response.data;
+            this.init();
+          } catch (error) {
+            GungUtilities.showErrorMessage("檢查檢驗或處置明細更新失敗", error, this);
+          }
+        },
+        async startCheckDetailed(){
+          try {
+            let response = await GungMedicalTechnologyCommunicator.startCheckDetailed(this.testExaminationDisposalDetail.id);
+            GungUtilities.showSuccessMessage("開始檢查檢驗或處置明細更新成功", response, this);
+            this.testExaminationDisposalDetail = response.data;
+            this.init();
+          } catch (error) {
+            GungUtilities.showErrorMessage("開始檢查檢驗或處置明細更新失敗", error, this);
+          }
+        },
+        async finishCheckDetailed(){
+          try {
+            let response = await GungMedicalTechnologyCommunicator.finishCheckDetailed(this.testExaminationDisposalDetail.id);
+            GungUtilities.showSuccessMessage("結束檢查檢驗或處置明細更新成功", response, this);
+            this.testExaminationDisposalDetail = response.data;
+            this.init();
+          } catch (error) {
+            GungUtilities.showErrorMessage("結束檢查檢驗或處置明細更新失敗", error, this);
+          }
+        },
+        async reportCheckDetailed(){
+          try {
+            let response = await GungMedicalTechnologyCommunicator.reportCheckDetailed(this.testExaminationDisposalDetail.id);
+            GungUtilities.showSuccessMessage("報告檢查檢驗或處置明細更新成功", response, this);
+            this.testExaminationDisposalDetail = response.data;
+            this.init();
+          } catch (error) {
+            GungUtilities.showErrorMessage("報告檢查檢驗或處置明細更新失敗", error, this);
+          }
+        },
+        translateTestExaminationDisposalDetailState(stateNumber){
+          switch(stateNumber) {
+            case 1:
+              return "未检验检查处置";
+            case 2:
+              return "检验检查处置中";
+            case 3:
+              return "检验检查处置完成，结果未出";
+            case 4:
+              return "结果已出";
+            default:
+              return "ERROR";
+          }
+        }
+
+      },
+
+      watch: {
+        // // 如果路由有变化，会再次执行该方法
+        "$route": "init"
+      }
+    }
+</script>
+
+<style scoped>
+  .listPane{
+    float:left;
+    width:10%;
+    height: 100vh;
+    background-color: rgb(235, 235, 235);
+    overflow: auto;
+  }
+
+  #rightPane{
+    float:left;
+    width: 52%;
+    height: 100vh;
+    overflow: auto;
+  }
+
+</style>

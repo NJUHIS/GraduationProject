@@ -1,26 +1,30 @@
 <template>
   <div>
-    <Button @click="routeToGungRegistration">返回挂号</Button>
-    <p>病历主键 ID :{{medicalRecord.id}}</p>
+    <GungWorkflowNavigation v-bind:activeName=this.$options.name v-bind:workflowId="$route.query.medicalRecordId"></GungWorkflowNavigation>
+<!--    <Button :to="'/gung-registration?registrationId='+medicalRecord.id">返回挂号</Button>-->
+    <div class="content">
+      <br><br>
+      <strong class="idTitle">病历主键 ID : {{medicalRecord.id}}</strong>
+      <br><br>
     <p>主诉：</p>
-    <Input v-model="medicalRecord.medicalReadme" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.medicalReadme" type="textarea" :rows="3" placeholder="请输入..."></Input>  <br><br>
     <p>现病史:</p>
-    <Input v-model="medicalRecord.medicalPresent" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.medicalPresent" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
     <p>现病治疗情况:</p>
-    <Input v-model="medicalRecord.presentTreat" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.presentTreat" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
     <p>既往史:</p>
-    <Input v-model="medicalRecord.medicalHistory" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.medicalHistory" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
     <p>过敏史:</p>
-    <Input v-model="medicalRecord.medicalAllergy" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.medicalAllergy" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
     <p>体格检查:</p>
-    <Input v-model="medicalRecord.medicalPhysique" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.medicalPhysique" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
     <p>诊断结果:</p>
-    <Input v-model="medicalRecord.medicalDiagnosis" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.medicalDiagnosis" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
     <p>处理意见:</p>
-    <Input v-model="medicalRecord.medicalHandling" type="textarea" :rows="3" placeholder="请输入..."></Input>
+    <Input v-model="medicalRecord.medicalHandling" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
 
 
-    <Button type="primary" @click="updateMedicalRecord"> 保存 </Button>
+    <Button type="primary" @click="updateMedicalRecord"> 保存 </Button>      <br><br>
 
     <i-table :columns="diagnosisColumns" :data="medicalRecord.diagnosisList"></i-table>
 
@@ -36,7 +40,7 @@
       </FormItem>
     </Form>
 
-
+    </div>
   </div>
 </template>
 
@@ -46,6 +50,7 @@
   import * as GungDoctorCommunicator from "../gung_communicators/GungDoctorCommunicator"
   import * as GungUtilities from "../GungUtilities";
   import * as GungBasicInformationCommunicator from "../gung_communicators/GungBasicInformationCommunicator"
+  import GungWorkflowNavigation from "./GungWorkflowNavigation";
 
     export default {
         name: "GungMedicalRecord",
@@ -73,6 +78,9 @@
           ]
 
         }
+      },
+      components:{
+        GungWorkflowNavigation
       },
 
       async created() {
@@ -118,35 +126,27 @@
             GungUtilities.showErrorMessage("病歷保存失敗",error,this);
           }
         },
-        async addDiagnosis(){
-            console.log(this.selectedNewDiseaseId);
-            let newDiagnosis={};
-            newDiagnosis.diseaseid=this.selectedNewDiseaseId;
-            newDiagnosis.medicalid=this.medicalRecord.id;
+        async addDiagnosis() {
+          console.log(this.selectedNewDiseaseId);
+          let newDiagnosis = {};
+          newDiagnosis.diseaseid = this.selectedNewDiseaseId;
+          newDiagnosis.medicalid = this.medicalRecord.id;
           try {
             let response = await GungBasicInformationCommunicator.addDiagnosis(newDiagnosis);
-            GungUtilities.showSuccessMessage("診斷新增成功",response,this);
-            newDiagnosis=response.data;
-          }catch(error){
-            GungUtilities.showErrorMessage("診斷新增失敗",error,this);
+            GungUtilities.showSuccessMessage("診斷新增成功", response, this);
+            newDiagnosis = response.data;
+          } catch (error) {
+            GungUtilities.showErrorMessage("診斷新增失敗", error, this);
           }
           try {
             let response = await GungDoctorCommunicator.getMedicalRecordById(this.medicalRecord.id);
-            GungUtilities.showSuccessMessage("病歷加載成功",response,this);
+            GungUtilities.showSuccessMessage("病歷加載成功", response, this);
             this.medicalRecord = response.data;
-          }catch(error){
-            GungUtilities.showErrorMessage("病歷加失敗",error,this);
+          } catch (error) {
+            GungUtilities.showErrorMessage("病歷加失敗", error, this);
           }
 
 
-        },
-        routeToGungRegistration(registrationId){
-          this.$router.push({
-            name: "GungRegistrationRoute",
-            query: {
-              registrationId:this.medicalRecord.registerId,
-            }
-          })
         }
       },
       watch: {
@@ -157,5 +157,11 @@
 </script>
 
 <style scoped>
+  .idTitle{
+    font-size: large;
+  }
 
+  .content{
+    margin: 0 20%;
+  }
 </style>

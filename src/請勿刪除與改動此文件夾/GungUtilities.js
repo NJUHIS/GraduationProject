@@ -10,3 +10,9 @@ export function showSuccessMessage(successMessage,response,component) {
   console.info(successMessage,data);
   component.$Notice.success({title:successMessage.toString()});
 }
+
+
+export function showSuccessMessageWithoutResponse(successMessage,component) {
+  console.info(successMessage);
+  component.$Notice.success({title:successMessage.toString()});
+}

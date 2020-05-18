@@ -1,13 +1,14 @@
 <template>
   <div>
+    <GungWorkflowNavigation v-bind:activeName=this.$options.name v-bind:workflowId="$route.query.registrationId"></GungWorkflowNavigation>
+    <div class="content">
     <div>
-      <Button>接诊</Button>
-      <Button @click="routeToGungMedicalRecord">查看病历</Button>
-      <Button>处方</Button>
-      <Button> 诊毕</Button>
+
+
     </div>
     <div>
-      <p>挂号主键 ID: {{registration.id}}</p>
+      <br><br>
+      <strong class="idTitle">挂号主键 ID : {{registration.id}}</strong><br><br>
       <p>患者真实姓名: {{registration.realname}}</p>
       <p>患者身份证号码: {{registration.idnumber}}</p>
       <p>患者出生日期: {{registration.birthdate}}</p>
@@ -15,20 +16,35 @@
       <p>预约看诊日期: {{registration.visitdate}}</p>
       <p>患者主键ID: {{registration.patientid}}</p>
       <p>排班主键ID: {{registration.scheduleId}}</p>
+      <p>问诊状态：{{translateRegistrationState(registration.visitstate)}}</p>
+      <br><br>
+      <Button to="/doctor">医生个人主页</Button>
+      <!--      <Button>接诊</Button>-->
+      <!--      <Button :to="'/gung-medical-record?medicalRecordId='+registration.id">病历</Button>-->
+      <!--      <Button :to="'/gung-prescription?prescriptionId='+registration.id">处方</Button>-->
+      <Button to="/checkapply">检查检验和处置</Button>
+      <Button :disabled="registration.visitstate!==1"   @click="finishDiagnosis"> 诊毕</Button>
 
+    </div>
     </div>
   </div>
 </template>
 
 <script>
+  import GungWorkflowNavigation from "./GungWorkflowNavigation";
   import * as GungRegistrationCommunicator from "../gung_communicators/GungRegistrationCommunicator";
   import * as GungPersonalInformationCommunicator from "../gung_communicators/GungPersonalInformationCommunicator";
   import * as GungDoctorCommunicator from "../gung_communicators/GungDoctorCommunicator"
   import * as GungUtilities from "../GungUtilities";
   import * as GungBasicInformationCommunicator from "../gung_communicators/GungBasicInformationCommunicator"
+  import * as GungMedicalTechnologyCommunicator from "../gung_communicators/GungMedicalTechnologyCommunicator";
 
     export default {
       name: "GungRegistration",
+
+      components:{
+        GungWorkflowNavigation
+      },
       data() {
         return {
           user: "",
@@ -42,16 +58,6 @@
        this.init();
       },
       methods: {
-
-        routeToGungMedicalRecord() {
-
-          this.$router.push({
-            name: "GungMedicalRecordRoute",
-            query: {
-              medicalRecordId: this.registration.medicalRecordId,
-            }
-          })
-        },
         async init(){
           let registrationId = this.$route.query.registrationId;
 
@@ -61,6 +67,7 @@
             this.registration = response.data;
           } catch (error) {
             GungUtilities.showErrorMessage("掛號加載失敗",error, this);
+
           }
 
 
@@ -73,6 +80,24 @@
             GungUtilities.showErrorMessage("醫院員工加載失敗",error, this);
           }
 
+        },
+        async finishDiagnosis(){
+          try {
+            let response = await GungDoctorCommunicator.finishDiagnosis(this.registration.id);
+            GungUtilities.showSuccessMessage("診畢成功", response, this);
+            this.init();
+          } catch (error) {
+            GungUtilities.showErrorMessage("診畢失敗", error, this);
+          }
+        },
+        translateRegistrationState(stateNumber){
+          console.log(stateNumber)
+          switch (stateNumber) {
+            case 0:return "未看诊"
+            case 1:return "正在看诊"
+            case 2:return "诊毕"
+            default:return "ERROR"
+          }
         }
       },
       watch: {
@@ -84,4 +109,13 @@
 </script>
 
 <style scoped>
+  template{
+  }
+  .idTitle{
+    font-size: large;
+  }
+
+  .content{
+    margin: 0 20%;
+  }
 </style>

@@ -16,3 +16,12 @@ export function dispenseMedicine(prescriptionId){
 
 
 
+export function returnMedicine(prescriptionId){
+  return axiosInstance.get("/returnMedicine", {
+    params:{
+      prescriptionId
+    }
+  })
+}
+
+

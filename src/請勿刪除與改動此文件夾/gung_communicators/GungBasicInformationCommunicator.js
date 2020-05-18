@@ -11,6 +11,11 @@ export function getAllDiseases(){
   )
 }
 
+export function getAllDrugs(){
+  return axiosInstance.get("/getAllDrugs"
+  )
+}
+
 
 
 export function addDiagnosis(addDiagnosis){
