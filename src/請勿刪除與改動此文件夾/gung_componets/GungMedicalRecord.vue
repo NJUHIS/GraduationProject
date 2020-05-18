@@ -24,11 +24,11 @@
     <Input v-model="medicalRecord.medicalHandling" type="textarea" :rows="3" placeholder="请输入..."></Input>      <br><br>
 
 
-    <Button type="primary" @click="updateMedicalRecord"> 保存 </Button>      <br><br>
+    <Button v-show="medicalRecord.caseState!==3"type="primary" @click="updateMedicalRecord"> 保存 </Button>      <br><br>
 
     <i-table :columns="diagnosisColumns" :data="medicalRecord.diagnosisList"></i-table>
 
-    <Form>
+    <Form v-show="medicalRecord.caseState!==3" >
       <FormItem label="添加诊断：">
         <Select v-model="selectedNewDiseaseId">
           <Option v-for="(item,index) in allDiseases" v-bind:value="item.id" v-bind:key="index">{{ item.diseasename }}</Option>

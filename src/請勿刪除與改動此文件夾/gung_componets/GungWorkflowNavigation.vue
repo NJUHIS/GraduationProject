@@ -1,6 +1,12 @@
 <template>
   <div>
   <Menu mode="horizontal"  v-bind:active-name=activeName>
+    <MenuItem name="doctor" to="/doctor">
+      个人主页
+    </MenuItem>
+    <MenuItem name="GungAllRegistrations" to="/gung-all-registrations">
+      所有挂号
+    </MenuItem>
     <MenuItem  v-show="workflowId!=null" name="GungRegistration" :to="'/gung-registration?registrationId='+workflowId">
       挂号
     </MenuItem>

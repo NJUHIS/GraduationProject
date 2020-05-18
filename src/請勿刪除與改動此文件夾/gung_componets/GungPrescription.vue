@@ -17,7 +17,7 @@
   <br><br>
     <p>处方明细：</p>
   <i-table :columns="prescriptionDetailedColumns" :data="prescription.prescriptionDetailedList"></i-table>
-  <Form v-show="!(prescription.id==null||prescription.prescriptionState!==1)" >
+  <Form v-show="!(prescription.id==null||prescription.prescriptionState!==1)&&(registration.visitstate!==2)" >
     <FormItem label="添加药品：">
       <Select v-model="prescriptionDetailed.drugsid">
         <Option v-for="(item,index) in allDrugs" v-bind:value="item.id" v-bind:key="index">{{ item.drugsName }}</Option>
@@ -39,8 +39,8 @@
 
   </Form>
 
-  <Button v-show="!(prescription.id==null||prescription.prescriptionState!==1)" type="primary" @click="updatePrescription">保存</Button>
-  <Button v-show="!(prescription.id==null||prescription.prescriptionState!==1)"  type="primary" @click="confirmPrescription">开出</Button>
+  <Button v-show="!(prescription.id==null||prescription.prescriptionState!==1)&&(registration.visitstate!==2)" type="primary" @click="updatePrescription">保存</Button>
+  <Button v-show="!(prescription.id==null||prescription.prescriptionState!==1)&&(registration.visitstate!==2)"  type="primary" @click="confirmPrescription">开出</Button>
   </div>
 </div>
 </template>
@@ -64,6 +64,7 @@
       },
       data() {
         return {
+          registration:{},
           prescriptionDetailed:{
             id:null,
             prescriptionid: null,
@@ -113,6 +114,17 @@
       },
       methods:{
           async init() {
+            let registrationId = this.$route.query.prescriptionId;
+
+            try {
+              let response = await GungRegistrationCommunicator.getRegistrationById(registrationId);
+              GungUtilities.showSuccessMessage("掛號加載成功", response,this);
+              this.registration = response.data;
+            } catch (error) {
+              GungUtilities.showErrorMessage("掛號加載失敗",error, this);
+
+            }
+
             let prescriptionId = this.$route.query.prescriptionId;
             try {
               let response = await GungDoctorCommunicator.getPrescriptionById(prescriptionId);

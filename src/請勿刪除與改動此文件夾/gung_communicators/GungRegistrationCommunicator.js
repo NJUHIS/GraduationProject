@@ -16,3 +16,10 @@ export function getRegistrationById(registrationId){
 
 
 
+export function getRegistrationsByConditions(conditions){
+  return axiosInstance.get("/getRegistrationsByConditions", {
+    params:conditions
+  })
+}
+
+

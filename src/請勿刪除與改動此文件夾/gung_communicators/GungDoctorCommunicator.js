@@ -111,3 +111,11 @@ export function finishDiagnosis(medicalRecordId){
     }
   })
 }
+
+export function admit(registrationId){
+  return axiosInstance.post("/admit" , {},{
+    params:{
+      registrationId
+    }
+  })
+}

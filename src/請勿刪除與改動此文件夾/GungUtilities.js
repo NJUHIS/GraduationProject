@@ -16,3 +16,13 @@ export function showSuccessMessageWithoutResponse(successMessage,component) {
   console.info(successMessage);
   component.$Notice.success({title:successMessage.toString()});
 }
+
+
+export function translateRegistrationState(stateNumber){
+  switch (stateNumber) {
+    case 0:return "未看诊"
+    case 1:return "正在看诊"
+    case 2:return "诊毕"
+    default:return "ERROR"
+  }
+}

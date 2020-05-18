@@ -22,6 +22,7 @@ import GungMedicalRecord from "../請勿刪除與改動此文件夾/gung_compone
 import GungMedicineDispensing from "../請勿刪除與改動此文件夾/gung_componets/GungMedicineDispensing";
 import GungPrescription from "../請勿刪除與改動此文件夾/gung_componets/GungPrescription";
 import GungTestExaminationDisposalExecution from "../請勿刪除與改動此文件夾/gung_componets/GungTestExaminationDisposalExecution";
+import GungAllRegistrations from "../請勿刪除與改動此文件夾/gung_componets/GungAllRegistrations";
 
 Vue.use(Router)
 export default new Router({
@@ -135,10 +136,15 @@ export default new Router({
 
     },
     {
-      name:"GungTestExaminationDisposalExecution",
+      name:"GungTestExaminationDisposalExecutionRoute",
       path:"/gung-test-examination-disposal-execution",
       component:GungTestExaminationDisposalExecution
 
+    },
+    {
+      name:"GungAllRegistrationsRoute",
+      path:"/gung-all-registrations",
+      component:GungAllRegistrations
     }
   ]
 })

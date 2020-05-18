@@ -18,7 +18,7 @@
       <p>排班主键ID: {{registration.scheduleId}}</p>
       <p>问诊状态：{{translateRegistrationState(registration.visitstate)}}</p>
       <br><br>
-      <Button to="/doctor">医生个人主页</Button>
+<!--      <Button to="/doctor">医生个人主页</Button>-->
       <!--      <Button>接诊</Button>-->
       <!--      <Button :to="'/gung-medical-record?medicalRecordId='+registration.id">病历</Button>-->
       <!--      <Button :to="'/gung-prescription?prescriptionId='+registration.id">处方</Button>-->
