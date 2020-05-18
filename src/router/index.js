@@ -108,23 +108,6 @@ export default new Router({
       component:technologydoctor
     },
     {
-      name:"GungRegistrationRoute",
-      path:"/gung-registration",
-      component:GungRegistration
-    },
-    {
-      name:"GungMedicalRecordRoute",
-      path:"/gung-medical-record",
-      component:GungMedicalRecord
-
-    },
-    ,
-    {
-      name:"GungMedicineDispensing",
-      path:"/gung-medicine-dispensing",
-      component:GungMedicineDispensing
-    },
-    {
       name:"writecase",
       path:"/writecase",
       component:WriteCase

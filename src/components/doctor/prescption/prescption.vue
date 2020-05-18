@@ -49,10 +49,12 @@
   import {addprescption, getalldrugs} from "./prescption";
   import {adddrugs} from "./prescption";
   import {getprescptionBymedicalId} from "./prescption";
+  import {ensure} from './prescption';
 
   export default {
     data(){
       return{
+        prescriptionState:0,//是否可以添加
         userId:0,
         medicalrecordid:0,//病例Id
         prescptionid:'',//是否存在药方ID，如果不存在则新建一个
@@ -118,7 +120,7 @@
       },
       //确认开出
       ensure(){
-
+        ensure(this)
       }
     },
   }

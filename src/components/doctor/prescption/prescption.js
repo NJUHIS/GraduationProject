@@ -24,6 +24,8 @@ function adddrugs(self) {
   self.waittoadd.push(tmp)
   self.tmpdrug=''
   self.tmpnum=''
+  self.tmpusage=''
+  self.tmpfrequency=''
 }
 
 //查找是否存在药方
@@ -33,8 +35,21 @@ function getprescptionBymedicalId(self) {
       id:self.medicalrecordid
     }
   }).then(function (response) {
-    console.log(response.data)
     self.prescptionid = response.data.id
+    self.prescriptionState = response.data.prescriptionState
+    for (var i=0;i<response.data.prescriptionDetailedList.length;i++){
+      var tmp = {}
+      tmp.drugsName = response.data.prescriptionDetailedList[i].drugs.drugsName
+      tmp.drugsFormat = response.data.prescriptionDetailedList[i].drugs.drugsFormat
+      tmp.drugsnum = response.data.prescriptionDetailedList[i].quantity
+      tmp.drugsDosage = response.data.prescriptionDetailedList[i].dosage
+      tmp.usage = response.data.prescriptionDetailedList[i].useage
+      tmp.tmpfrequency = response.data.prescriptionDetailedList[i].frequency
+      self.existdrugs.push(tmp)
+    }
+    if (self.prescriptionState == 2){
+      self.$Message.warning("已经存在药方，不可再次开出")
+    }
   })
 }
 
@@ -53,14 +68,16 @@ function addprescption(self) {
           quantity:self.waittoadd[i].drugsnum,
           price:self.waittoadd[i].drugsPrice,
           dosage:self.waittoadd[i].drugsDosage,
-          frequency:self.waittoadd[i].frequency,
+          frequency:self.waittoadd[i].tmpfrequency,
           useage:self.waittoadd[i].usage
         }).then(function (response) {
-          console.log(response.data)
+          self.$Message.success("添加成功")
+          self.waittoadd.splice(0,self.waittoadd.length)
+          self.prescptionid = response.data.id
         })
       }
     })
-  }else{
+  }else if (self.prescriptionState == 1){
     //存在已有药方时
     for (var i =0;i<self.waittoadd.length;i++){
       self.$http.post('api//his/DoctorController/addPrescriptionDetailed',{
@@ -72,15 +89,31 @@ function addprescption(self) {
         frequency:self.waittoadd[i].frequency,
         useage:self.waittoadd[i].usage
       }).then(function (response) {
-        console.log(response.data)
+        self.$Message.success("添加成功")
+        self.waittoadd.splice(0,self.waittoadd.length)
       })
     }
+  }else{
+    self.$Message.warning("你已经确认开出药方不可再次编辑")
   }
+}
+
+//确认开出药方
+function ensure(self) {
+  self.$http.get('api//his/DoctorController/confirmPrescription',{
+    params:{
+      prescriptionId:self.prescptionid
+    }
+  }).then(function (response) {
+    console.log(response.data)
+    self.$Message.success("成功确认开出,此药方不可在修改")
+  })
 }
 
 export {
   getalldrugs,
   adddrugs,
   getprescptionBymedicalId,
-  addprescption
+  addprescption,
+  ensure
 }
