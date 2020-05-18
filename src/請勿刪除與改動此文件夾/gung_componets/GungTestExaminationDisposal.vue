@@ -27,6 +27,7 @@
       </div>
     </div>
     <div class="rightPane" v-show="testExaminationDisposal.id!=null">
+      <strong class="idTitle">挂号主键 ID : {{registration.id}}</strong><br><br>
       <strong class="idTitle">检查检验或处置主键 ID ：{{testExaminationDisposal.id}} </strong><br><br>
       <strong class="idTitle">检查检验或处置主键明细 ID ：{{testExaminationDisposalDetail.id}} </strong><br><br>
       <p v-show="testExaminationDisposalDetail.id!=null&&testExaminationDisposalDetail.state===4">
@@ -209,6 +210,7 @@
             this.registration = response.data;
           } catch (error) {
             GungUtilities.showErrorMessage("掛號加載失敗", error, this);
+            return;
 
           }
 

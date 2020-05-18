@@ -23,7 +23,11 @@
       <br><br>
       <p>结果：</p>
       <Input :rows="3" placeholder="请输入..." type="textarea"
-             v-model="testExaminationDisposalDetail.result"></Input><br><br>
+             v-if="testExaminationDisposalDetail.id!=null&&testExaminationDisposalDetail.state!==4"
+             v-model="testExaminationDisposalDetail.result"></Input>
+      <p v-else-if ="testExaminationDisposalDetail.id!=null" > {{testExaminationDisposalDetail.result}}</p>
+      <br><br>
+      <div v-show="testExaminationDisposalDetail.id!=null&&testExaminationDisposalDetail.state!==4">
       <Button :disabled="testExaminationDisposalDetail.id==null||testExaminationDisposalDetail.state===4" @click="updateCheckDetailed"
               type="primary">保存结果
       </Button>
@@ -36,7 +40,8 @@
       <Button :disabled="testExaminationDisposalDetail.id==null||testExaminationDisposalDetail.state!==3" @click="reportCheckDetailed"
               type="primary">完成并报告
       </Button>
-      <br><br>
+        <br><br>
+      </div>
       <i-table :columns="testExaminationDisposalDetailListColumns" :data="testExaminationDisposal.checkDetailedList"
                @on-row-click="showTestExaminationDisposalDetail"></i-table>
     </div>

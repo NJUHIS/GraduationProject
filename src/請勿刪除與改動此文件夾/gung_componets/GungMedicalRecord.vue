@@ -104,7 +104,7 @@
           this.registration = response.data;
         } catch (error) {
           GungUtilities.showErrorMessage("掛號加載失敗", error, this);
-
+          return;
         }
 
         try {

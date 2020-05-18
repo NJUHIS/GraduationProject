@@ -10,7 +10,8 @@
       <br><br>
 
       <p>处方名称：</p>
-      <Input :disabled="registration.id!==1||prescription.id==null||prescription.prescriptionState!==1"
+      <p v-if="prescription.id!=null&&(registration.visitstate!==1||prescription.prescriptionState!==1)" >{{prescription.prescriptionName}}</p>
+      <Input v-else-if="prescription.id!=null"
              placeholder="请输入..." type="text" v-model="prescription.prescriptionName"></Input>
 
       <br><br>
@@ -133,7 +134,7 @@
           this.registration = response.data;
         } catch (error) {
           GungUtilities.showErrorMessage("掛號加載失敗", error, this);
-
+          return;
         }
 
         let prescriptionId = this.$route.query.prescriptionId;
