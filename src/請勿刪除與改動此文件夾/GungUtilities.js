@@ -40,6 +40,24 @@ export function toYYYYMMDD(date) {
   return year + '-' + month + '-' + day;
 }
 
+//2016-6-14 11:20:00
+export function fromYYYYMMDD(dateStr) {
+
+  let separator="-";
+
+  let dateArr = dateStr.split(separator);
+  let year = parseInt(dateArr[0]);
+  let month;
+  if(dateArr[1].indexOf("0") === 0){
+    month = parseInt(dateArr[1].substring(1));
+  }else{
+    month = parseInt(dateArr[1]);
+  }
+  let day = parseInt(dateArr[2]);
+  let date = new Date(year,month -1,day);
+  console.log("fromYYYYMMDD",date);
+  return date;
+}
 
 
 export function translateTestExaminationDisposalDetailState(stateNumber){

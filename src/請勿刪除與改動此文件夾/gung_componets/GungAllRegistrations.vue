@@ -8,12 +8,18 @@
         <div>
           <Row>
             <Col span="4">
-              <DatePicker :start-date="fromVisitDateRaw" @on-change="init" placeholder="Select date" type="date"
-                          v-model="fromVisitDateRaw"></DatePicker>
+              <DatePicker  @on-change="init" placeholder="Select date" type="date"
+                          v-model="fromVisitDateRaw"
+                          :clearable="false"
+                          :editable="false"
+              ></DatePicker>
             </Col>
             <Col span="4">
-              <DatePicker :start-date="toVisitDateRaw" @on-change="init" placeholder="Select date" type="date"
-                          v-model="toVisitDateRaw"></DatePicker>
+              <DatePicker  @on-change="init" placeholder="Select date" type="date"
+                          v-model="toVisitDateRaw"
+                          :clearable="false"
+                          :editable="false"
+              ></DatePicker>
             </Col>
           </Row>
         </div>
@@ -44,7 +50,7 @@
         <p>预约看诊日期: {{registration.visitdate}}</p>
         <p>患者主键ID: {{registration.patientid}}</p>
         <p>排班主键ID: {{registration.scheduleId}}</p>
-        <p>问诊状态：{{GungUtilities.translateRegistrationState(registration.visitstate)}}</p>
+        <p>问诊状态：{{GungUtilities.translateRegistrationState(registration.visitstate)}}</p><br><br>
         <Button @click="admit" v-show="registration.visitstate===0"> 接诊</Button>
         <Button :to="'/gung-registration?registrationId='+registration.id"
                 v-show="registration.id!==null&&registration.visitstate!==0">详情
@@ -70,8 +76,8 @@
       return {
         GungUtilities,
 
-        fromVisitDateRaw: new Date(),
-        toVisitDateRaw: new Date(),
+        fromVisitDateRaw: null,
+        toVisitDateRaw:null,
 
         user: {},
         registrationListColumns: [
@@ -92,11 +98,32 @@
     components: {
       GungWorkflowNavigation
     },
-    mounted() {
+    created() {
       this.init();
     },
     methods: {
       async init() {
+        if(this.fromVisitDateRaw==null){
+          let fromSession=sessionStorage.getItem("fromVisitDate");
+          if(fromSession!=null) {
+            this.fromVisitDateRaw=GungUtilities.fromYYYYMMDD(fromSession);
+          } else{
+            this.fromVisitDateRaw = new Date();
+          }
+        }
+        sessionStorage.setItem("fromVisitDate",GungUtilities.toYYYYMMDD(this.fromVisitDateRaw));
+
+
+        if(this.toVisitDateRaw==null){
+          let fromSession=sessionStorage.getItem("toVisitDate");
+          if(fromSession!=null) {
+            this.toVisitDateRaw=GungUtilities.fromYYYYMMDD(fromSession);
+          } else{
+            this.toVisitDateRaw = new Date()
+          }
+        }
+        sessionStorage.setItem("toVisitDate",GungUtilities.toYYYYMMDD(this.toVisitDateRaw));
+
 
         console.log(GungUtilities.toYYYYMMDD(this.fromVisitDateRaw));
 
@@ -109,8 +136,6 @@
           GungUtilities.showErrorMessage("醫院員工加載失敗", error, this);
           return;
         }
-
-
         try {
           let conditions = {
             fromVisitDate: GungUtilities.toYYYYMMDD(this.fromVisitDateRaw),

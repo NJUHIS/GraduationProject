@@ -10,7 +10,7 @@
       <br><br>
 
       <p>处方名称：</p>
-      <Input :disabled="(prescription.id==null||prescription.prescriptionState!==1)"
+      <Input :disabled="registration.id!==1||prescription.id==null||prescription.prescriptionState!==1"
              placeholder="请输入..." type="text" v-model="prescription.prescriptionName"></Input>
 
       <br><br>
