@@ -107,6 +107,9 @@
       }
     },
     mounted() {
+      this.existdetail.splice(0,this.existdetail.length)
+      this.checkapplydetail.splice(0,this.checkapplydetail.length)
+      this.checkprojectList.splice(0,this.checkprojectList.length)
       this.userId = window.localStorage.getItem("userID")
       this.medicalrecordid = window.localStorage.getItem("medicalrecordid")
       this.registerId = window.localStorage.getItem("registrationId")

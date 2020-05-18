@@ -27,6 +27,9 @@
         <FormItem>
           <Button type="primary" @click="adddiagnose"  style="margin-left: 2%">确认添加</Button>
         </FormItem>
+        <FormItem>
+          <Table :columns="existcolumns" :data="existdiagnose"></Table>
+        </FormItem>
       </Form>
     </div>
   </div>
@@ -45,6 +48,9 @@
         medicalrecordid:0,//病例Id
         diseaseId:0,//诊断结论Id
         diseaseList:[],//诊断列表
+        existdiagnose:[],//已有的诊断列表
+        existcolumns:[
+        ],//已有诊断显示的列
       }
     },
     mounted() {
