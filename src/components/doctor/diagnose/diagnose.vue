@@ -32,7 +32,7 @@
           <Button type="primary" @click="adddiagnose"  style="margin-left: 2%">确认添加</Button>
         </FormItem>
         <FormItem>
-          <Table :columns="existcolumns" :data="existdiagnose"></Table>
+          <Table class="table" :columns="existcolumns" :data="existdiagnose"></Table>
         </FormItem>
       </Form>
     </div>
@@ -53,7 +53,22 @@
         diseaseId:0,//诊断结论Id
         diseaseList:[],//诊断列表
         existdiagnose:[],//已有的诊断列表
-        existcolumns:[
+        existcolumns:[{
+          title:"诊断代码",
+          key:"diseasecode"
+        },
+          {
+            title:"诊断名称",
+            key:"diseasename"
+          },
+          {
+            title:"诊断编号",
+            key:"diseaseicd"
+          },
+          {
+            title:"诊断类型",
+            key:"diseasetype"
+          }
         ],//已有诊断显示的列
       }
     },

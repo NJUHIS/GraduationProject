@@ -108,11 +108,24 @@ function read(index,self){
   self.checkmodal = true
 }
 
+//确认开出
+function ensure(index,self){
+  if (self.existapply[index].state=="未开出"){
+    self.$http.post('api//his/DoctorController/confirmCheckApply?checkApplyId='+self.existapply[index].id,{
+    }).then(function (response) {
+      self.existapply[index].state="已开出"
+    })
+  }else{
+    self.$Message.warning("无需重复开出")
+  }
+}
+
 
 export {
   getAllFmedItems,
   addcheck,
   adddetail,
   getexistdetail,
-  read
+  read,
+  ensure
 }

@@ -44,6 +44,7 @@
                 执行状态:{{item.state}}
               </li>
               <Button type="primary" @click="read(i)" class="button" >查看详情</Button>
+              <Button type="primary" @click="ensure(i)" class="button1">开出检查</Button>
             </ul>
           </Card>
         </FormItem>
@@ -114,6 +115,7 @@
   import {adddetail} from "./checkapply";
   import {getexistdetail} from "./checkapply";
   import {read} from "./checkapply";
+  import {ensure} from "./checkapply";
 
   export default {
     data(){
@@ -165,6 +167,10 @@
       //查看存在的详情信息
       read(i){
         read(i,this)
+      },
+      //开出检查单
+      ensure(i){
+        ensure(i,this)
       },
       //跳转到诊断界面
       diagnose(){

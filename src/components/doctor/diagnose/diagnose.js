@@ -32,17 +32,20 @@ function adddiagnose(self) {
   }).then(function (response) {
     self.diseaseId = ""
     self.$Message.success("添加成功")
+    getDiseaseById(self)
   })
 }
 //添加已有诊断
 function getDiseaseById(self) {
-  console.log(self.registerId)
   self.$http.get('api//his/DoctorController/getMedicalRecordsByConditions',{
     params:{
       registrationId:self.registerId
     }
   }).then(function (response) {
-    console.log(response.data)
+    self.existdiagnose.splice(0,self.existdiagnose.length)
+    for (var i =0;i<response.data[0].diagnosisList.length;i++){
+      self.existdiagnose.push(response.data[0].diagnosisList[i].disease)
+    }
   })
 }
 export {
