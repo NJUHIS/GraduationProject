@@ -22,17 +22,24 @@
       </div>
     </Menu>
     <div class="layout-content">
-
+      <Form ref="formCustom" :model="caseCustom" :label-width="80">
+        <FormItem >
+          <Button type="primary" @click="devise"  style="margin-left: 2%">修改</Button>
+          <Button type="success" @click="finish" style="margin-left: 4%">诊毕</Button>
+        </FormItem>
+      </Form>
     </div>
   </div>
 </template>
 <script>
+  import {finish} from "./writecase";
 
   export default {
     data(){
       return{
         userId:0,
         medicalrecordid:0,//病例Id
+        caseCustom:[],//病例form
       }
     },
     created() {
@@ -41,6 +48,14 @@
       this.medicalrecordid = window.localStorage.getItem("medicalrecordid")
     },
     methods:{
+      //修改病例
+      devise(){
+
+      },
+      //诊毕
+      finish(){
+        finish(this)
+      },
       //跳转到诊断界面
       diagnose(){
         this.$router.push("/diagnose")
