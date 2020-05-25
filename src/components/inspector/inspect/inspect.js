@@ -1,6 +1,7 @@
 import $ from 'jquery';
 //根据挂号Id获取检查处置单
 function getcheck(self) {
+  self.checkapply.splice(0,self.checkapply.length)
   self.$http.get('api//his/DoctorController/getCheckAppliesByConditions',{
     params:{
       state:2,

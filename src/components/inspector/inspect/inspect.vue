@@ -13,7 +13,7 @@
         </Menu-item>
         <Menu-item name="3" @click.native="getcost">
           <Icon type="ios-navigate"></Icon>
-          处方缴费
+          查看发票
         </Menu-item>
       </div>
     </Menu>
@@ -22,7 +22,7 @@
         <label>挂号编号：</label>
         <i-input  type="text" v-model="registerId" style="width: 250px;margin-left: 1%" ></i-input>
       </div>
-      <Button type="success" style="margin-left: 3%;margin-top: 1%" @click="getcheck">搜索</Button>
+      <Button type="success" style="margin-left: 3%;margin-top: 1%" @click="getcheck">搜索检查处置单</Button>
       <br>
       <Card class="card" v-for="(item,i) in checkapply" v-bind:key="i">
         <p slot="title">
