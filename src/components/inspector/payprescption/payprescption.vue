@@ -18,6 +18,12 @@
       </div>
     </Menu>
     <div class="layout-content">
+      <div style="margin-top: 1%;margin-left: 3%">
+        <label>挂号编号：</label>
+        <i-input  type="text" v-model="registerId" style="width: 250px;margin-left: 1%" ></i-input>
+      </div>
+      <Button type="success" style="margin-left: 3%;margin-top: 1%" @click="getcheck">搜索</Button>
+      <br>
       <Card class="card" v-for="(item,i) in registerList" v-bind:key="i">
         <p slot="title">
           <Icon type="ios-film-outline"></Icon>
@@ -47,7 +53,7 @@
   export default {
     data(){
       return{
-
+        registerId:"",//挂号Id
       }
     },
     created() {
