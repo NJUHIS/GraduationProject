@@ -75,6 +75,10 @@
             key: "id"
           },
           {
+            title: '目的和要求',
+            key: "position"
+          },
+          {
             title: '项目名称',
             render: (h, params) => {
               return h('p', params.row.fmedItem.itemname)
