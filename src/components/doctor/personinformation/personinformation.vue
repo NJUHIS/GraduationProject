@@ -31,6 +31,9 @@
       </label>
 
       <br>
+      <Button to="/gung-all-registrations">我是门诊医生</Button>
+      <Button to="/gung-medicine-dispensing">我是药房医生</Button>
+      <Button to="/gung-test-examination-disposal-execution">我是医技医生</Button>
 
     </div>
   </div>

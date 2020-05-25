@@ -190,7 +190,7 @@
           GungUtilities.showSuccessMessage("處方明細添加成功", response, this);
           this.init();
           this.newPrescriptionDetailed.quantity = null;
-          this.newPrescriptionDetailed.dosage = null;
+          this.newPrescriptionDetailed.useage = null;
           this.newPrescriptionDetailed.frequency = null;
           this.newPrescriptionDetailed.drugsid = null;
         } catch (error) {
