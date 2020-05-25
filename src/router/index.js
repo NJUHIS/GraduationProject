@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Pay from '@/components/inspector/inspect/inspect.vue'
 import Login from '@/components/login/login.vue'
 import PersonInformation from '@/components/patient/personinformation/personinformation.vue'
 import Register from '@/components/patient/register/register.vue'
@@ -25,6 +26,8 @@ import GungPrescription from "../請勿刪除與改動此文件夾/gung_componet
 import GungTestExaminationDisposalExecution from "../請勿刪除與改動此文件夾/gung_componets/GungTestExaminationDisposalExecution";
 import GungAllRegistrations from "../請勿刪除與改動此文件夾/gung_componets/GungAllRegistrations";
 import GungTestExaminationDisposal from "../請勿刪除與改動此文件夾/gung_componets/GungTestExaminationDisposal";
+import payprescption from "@/components/inspector/payprescption/payprescption.vue"
+import getcost from "@/components/inspector/getcost/getcost.vue"
 
 Vue.use(Router)
 export default new Router({
@@ -158,6 +161,21 @@ export default new Router({
       name:"GungAllRegistrationsRoute",
       path:"/gung-all-registrations",
       component:GungAllRegistrations
+    },
+    {
+      name:"pay",
+      path:"/pay",
+      component:Pay
+    },
+    {
+      name:"payprescption",
+      path:"/payprescption",
+      component:payprescption
+    },
+    {
+      name:"getcost",
+      path:"/getcost",
+      component:getcost
     }
   ]
 })

@@ -20,6 +20,10 @@ function login(userID,password,flag3,route,self) {
         route.push("/adddoctor")
       }else if (typid ==3){
         route.push("/technologydoctor")
+      }else if (typid ==4){
+        route.push("/pay")
+      }else if (typid ==6){
+        route.push("/gung-registration")
       }
     }).catch(function (error) {
       self.$Message.error(error.response.data.message)

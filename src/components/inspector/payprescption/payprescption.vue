@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <Menu mode="horizontal" theme="dark" active-name="1">
+    <Menu mode="horizontal" theme="dark" active-name="2">
       <div class="layout-logo"></div>
       <div class="layout-nav">
         <Menu-item name="1" @click.native="paycheck">
@@ -18,28 +18,25 @@
       </div>
     </Menu>
     <div class="layout-content">
-      <div style="margin-top: 1%;margin-left: 3%">
-        <label>挂号编号：</label>
-        <i-input  type="text" v-model="registerId" style="width: 250px;margin-left: 1%" ></i-input>
-      </div>
-      <Button type="success" style="margin-left: 3%;margin-top: 1%" @click="getcheck">搜索</Button>
-      <br>
-      <Card class="card" v-for="(item,i) in checkapply" v-bind:key="i">
+      <Card class="card" v-for="(item,i) in registerList" v-bind:key="i">
         <p slot="title">
           <Icon type="ios-film-outline"></Icon>
-          检查处置单
+          挂号信息
         </p>
         <ul>
           <li class="li">
-            编号:{{item.id}}
+            真实姓名:{{item.realname}}
           </li>
           <li class="li">
-            价格:{{item.totalSum}}
+            性别:{{item.gender}}
           </li>
           <li class="li">
-            状态:"已开立并发出，未收费"
+            家庭住址:{{item.homeaddress}}
           </li>
-          <Button type="primary" @click="pay(i)" class="button" style="margin-top: 3%">缴费</Button>
+          <li class="li">
+            {{item.isbook}}
+          </li>
+          <Button type="primary" @click="admit(i)" class="button" >继续看诊</Button>
         </ul>
       </Card>
     </div>
@@ -47,28 +44,17 @@
 </template>
 <script>
 
-  import {getcheck} from "./inspect";
-  import {pay} from "./inspect"
-
   export default {
     data(){
       return{
-        registerId:"",//挂号Id
-        checkapply:[],//检查处置单
+
       }
     },
     created() {
       this.userId = window.localStorage.getItem("userID")
+      getcost()
     },
     methods:{
-      //根据挂号Id获取检查处置单
-      getcheck(){
-        getcheck(this)
-      },
-      //缴费检查处置单
-      pay(i){
-        pay(i,this)
-      },
       //跳转缴费
       paycheck(){
         this.$router.push("/pay")
@@ -87,5 +73,5 @@
 </script>
 
 <style scoped>
-  @import "inspect.css";
+
 </style>
