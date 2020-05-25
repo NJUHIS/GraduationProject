@@ -13,7 +13,7 @@
         </Menu-item>
         <Menu-item name="3" @click.native="getcost">
           <Icon type="ios-navigate"></Icon>
-          处方缴费
+          查看发票
         </Menu-item>
       </div>
     </Menu>

@@ -13,7 +13,7 @@
         </Menu-item>
         <Menu-item name="3" @click.native="getcost">
           <Icon type="ios-navigate"></Icon>
-          处方缴费
+          查看发票
         </Menu-item>
       </div>
     </Menu>
@@ -22,27 +22,24 @@
         <label>挂号编号：</label>
         <i-input  type="text" v-model="registerId" style="width: 250px;margin-left: 1%" ></i-input>
       </div>
-      <Button type="success" style="margin-left: 3%;margin-top: 1%" @click="getcheck">搜索</Button>
+      <Button type="success" style="margin-left: 3%;margin-top: 1%" @click="getprescption">搜索处方</Button>
       <br>
-      <Card class="card" v-for="(item,i) in registerList" v-bind:key="i">
+      <Card class="card" v-for="(item,i) in prescption" v-bind:key="i">
         <p slot="title">
           <Icon type="ios-film-outline"></Icon>
-          挂号信息
+          处方信息
         </p>
         <ul>
           <li class="li">
-            真实姓名:{{item.realname}}
+            处方编号:{{item.id}}
           </li>
           <li class="li">
-            性别:{{item.gender}}
+            状态:{{item.state}}
           </li>
           <li class="li">
-            家庭住址:{{item.homeaddress}}
+            价格:{{item.sum}}
           </li>
-          <li class="li">
-            {{item.isbook}}
-          </li>
-          <Button type="primary" @click="admit(i)" class="button" >继续看诊</Button>
+          <Button type="primary" @click="pay(i)" class="button" >缴费</Button>
         </ul>
       </Card>
     </div>
@@ -50,17 +47,27 @@
 </template>
 <script>
 
+  import {getprescption, pay} from './payprescption'
+
   export default {
     data(){
       return{
         registerId:"",//挂号Id
+        prescption:[],//处方
       }
     },
     created() {
       this.userId = window.localStorage.getItem("userID")
-      getcost()
     },
     methods:{
+      //搜索处方
+      getprescption(){
+        getprescption(this)
+      },
+      //缴费
+      pay(i){
+        pay(i,this)
+      },
       //跳转缴费
       paycheck(){
         this.$router.push("/pay")
@@ -79,5 +86,5 @@
 </script>
 
 <style scoped>
-
+@import "payprescption.css";
 </style>
